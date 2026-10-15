@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Test') {
+            steps {
+                sh 'python3 -m pytest -v'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t student-academic-platform:1.0 .'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'minikube image load student-academic-platform:1.0'
+                sh 'kubectl rollout restart deployment/student-academic-platform'
+                sh 'kubectl rollout status deployment/student-academic-platform'
+            }
+        }
+    }
+}
