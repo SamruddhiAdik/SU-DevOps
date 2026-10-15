@@ -1,0 +1,33 @@
+# Example starter manifest. Configure secrets, persistent storage, ingress/TLS,
+# resource limits, probes, and a production database before real deployment.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-api
+  template:
+    metadata:
+      labels:
+        app: library-api
+    spec:
+      containers:
+        - name: library-api
+          image: library-management-platform:latest
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-api
+spec:
+  selector:
+    app: library-api
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: ClusterIP
