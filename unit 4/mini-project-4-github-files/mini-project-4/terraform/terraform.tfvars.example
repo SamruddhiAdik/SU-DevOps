@@ -1,0 +1,8 @@
+aws_region   = "ap-south-1"
+project_name = "student-platform-mp4"
+key_name     = "REPLACE_WITH_EXISTING_EC2_KEY_PAIR_NAME"
+admin_cidr   = "203.0.113.10/32" # Replace with your own public IP/32.
+instance_type = "t2.micro"
+
+# Optional: specify a valid Ubuntu 22.04 AMI ID for your region.
+# ami_id = "ami-xxxxxxxxxxxxxxxxx"

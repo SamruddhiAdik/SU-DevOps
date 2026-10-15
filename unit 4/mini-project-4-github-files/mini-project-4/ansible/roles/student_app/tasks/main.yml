@@ -1,0 +1,36 @@
+---
+- name: Create application directory
+  ansible.builtin.file:
+    path: "{{ project_root_remote }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy application source and Dockerfile
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../app/"
+    dest: "{{ project_root_remote }}/"
+    owner: root
+    group: root
+    mode: preserve
+  register: app_source
+
+- name: Build Student Platform Docker image
+  community.docker.docker_image:
+    name: "{{ app_name }}"
+    tag: latest
+    source: build
+    build:
+      path: "{{ project_root_remote }}"
+  register: docker_build
+
+- name: Run Student Platform container
+  community.docker.docker_container:
+    name: student-platform
+    image: "{{ app_name }}:latest"
+    state: started
+    restart_policy: always
+    recreate: "{{ app_source.changed | default(false) or docker_build.changed | default(false) }}"
+    published_ports:
+      - "{{ app_port }}:{{ container_app_port }}"

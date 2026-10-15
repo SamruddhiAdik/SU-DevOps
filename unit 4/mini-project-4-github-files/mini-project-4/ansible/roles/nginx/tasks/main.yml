@@ -1,0 +1,33 @@
+---
+- name: Install Nginx reverse proxy configuration
+  ansible.builtin.template:
+    src: student-platform.conf.j2
+    dest: /etc/nginx/sites-available/student-platform
+    owner: root
+    group: root
+    mode: "0644"
+  notify: reload nginx
+
+- name: Enable Student Platform site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/student-platform
+    dest: /etc/nginx/sites-enabled/student-platform
+    state: link
+  notify: reload nginx
+
+- name: Remove default Nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
+
+- name: Validate Nginx configuration
+  ansible.builtin.command: nginx -t
+  changed_when: false
+
+- name: Ensure Nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+

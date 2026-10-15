@@ -1,0 +1,9 @@
+---
+- name: Configure Student Record & Academic Management Platform
+  hosts: student_servers
+  become: true
+  roles:
+    - common
+    - docker
+    - nginx
+    - student_app

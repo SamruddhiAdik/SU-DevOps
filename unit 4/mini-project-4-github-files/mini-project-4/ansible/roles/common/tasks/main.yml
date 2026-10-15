@@ -1,0 +1,21 @@
+---
+- name: Refresh apt cache and upgrade security updates
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+    cache_valid_time: 3600
+
+- name: Install common system packages
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - git
+      - nginx
+    state: present
+
+- name: Ensure Nginx is enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

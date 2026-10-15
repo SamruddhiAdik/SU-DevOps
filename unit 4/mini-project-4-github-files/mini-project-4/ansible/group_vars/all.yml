@@ -1,0 +1,6 @@
+---
+app_name: student-platform
+app_port: 8080
+container_app_port: 8080
+project_root_remote: /opt/student-platform
+nginx_server_name: _
